@@ -33,7 +33,7 @@ Em caso de erro, por favor, verifique se o arquivo ".env" existe e está devidam
 
 ### Rotas (Config):
 
-[ [Aluno](./src/routes/aluno.routes.js), [Curso](./src/routes/curso.routes.js), [Usuário](./src/routes/usuario.routes.js), [Log](./src/routes/log.routes.js) ]
+[ [Analyics Company](./src/routes/analytics-company.routes.js), [Subject Company](./src/routes/subject-company.routes.js) ]
 
 ### Observação
 
