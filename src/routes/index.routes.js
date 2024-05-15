@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import usuarioRoutes from './analytics-company.routes.js'
+import analyticsCompanyRoutes from './analytics-company.routes.js'
 
 import dotenv from 'dotenv'
 import { dirname } from 'path'
@@ -10,10 +10,10 @@ dotenv.config({ path: __dirname + '/./../../../.env' })
 
 const routes = Router()
 
-routes.use('/usuario', usuarioRoutes)
+routes.use('/analytics-company', analyticsCompanyRoutes)
 
 routes.get('/', (_req, res) => {
-  res.status(200).json({ response: 'Servidor rodando.' })
+  res.status(200).json({ response: '🚀!Server running!🚀' })
 })
 
 export default routes

@@ -1,5 +1,5 @@
-import AnalyticsCompanyRepository from '../repository/analytics-company.repository.js'
-const analyticsCompanyRepository = new AnalyticsCompanyRepository()
+import SubjectCompanyRepository from '../repository/subject-company.repository.js'
+const subjectCompanyRepository = new SubjectCompanyRepository()
 
 import dotenv from 'dotenv'
 import { dirname } from 'path'
@@ -10,12 +10,12 @@ import { RespostaSucesso, RespostaErro, RespostaFalha } from '../utils/handler.j
 const __dirname = dirname(fileURLToPath(import.meta.url))
 dotenv.config({ path: __dirname + '/./../../../.env' })
 
-export default class AnalyticsCompanyController {
+export default class SubjectCompanyController {
   create() {
     return async (req, res) => {
       const { company, user } = req.body
 
-      if (!company?.name_analytics || !company?.cnpj_analytics || !company?.more_information) {
+      if (!company?.name_subject || !company?.cnpj_subject || !company?.more_information) {
         const response = { erro: 'missingParameters' }
         return RespostaErro(400, res, req, response)
       }
@@ -32,7 +32,7 @@ export default class AnalyticsCompanyController {
       }
 
       try {
-        const response = await analyticsCompanyRepository.create({ company, user })
+        const response = await subjectCompanyRepository.create({ company, user })
         if (response.erro) {
           return RespostaErro(400, res, req, response)
         } else {
@@ -46,15 +46,15 @@ export default class AnalyticsCompanyController {
 
   find() {
     return async (req, res) => {
-      const { id: id_analytics_company } = req.query
+      const { id: id_subject_company } = req.query
 
-      if (!id_analytics_company) {
+      if (!id_subject_company) {
         const response = { erro: 'missingParameters' }
         return RespostaErro(400, res, req, response)
       }
 
       try {
-        const response = await analyticsCompanyRepository.find(id_analytics_company)
+        const response = await subjectCompanyRepository.find(id_subject_company)
         if (response.erro) {
           return RespostaErro(400, res, req, response)
         } else {
@@ -68,10 +68,10 @@ export default class AnalyticsCompanyController {
 
   list() {
     return async (req, res) => {
-      const { name_analytics, cnpj_analytics, more_information } = req.query
+      const { name_subject, cnpj_subject, more_information } = req.query
 
       try {
-        const response = await analyticsCompanyRepository.list({ name_analytics, cnpj_analytics, more_information })
+        const response = await subjectCompanyRepository.list({ name_subject, cnpj_subject, more_information })
         if (response.erro) {
           return RespostaErro(400, res, req, response)
         } else {
@@ -85,22 +85,22 @@ export default class AnalyticsCompanyController {
 
   update() {
     return async (req, res) => {
-      const { id: id_analytics } = req.query
+      const { id: id_subject } = req.query
 
-      if (!id_analytics) {
+      if (!id_subject) {
         const response = { erro: 'missingParameters' }
         return RespostaErro(400, res, req, response)
       }
 
       const { body } = req.body
 
-      if (!body?.name_analytics || !body?.cnpj_analytics || !body?.more_information) {
+      if (!body?.name_subject || !body?.cnpj_subject || !body?.more_information) {
         const response = { erro: 'missingParameters' }
         return RespostaErro(400, res, req, response)
       }
 
       try {
-        const response = await analyticsCompanyRepository.update(id_analytics, body)
+        const response = await subjectCompanyRepository.update(id_subject, body)
         if (response.erro) {
           return RespostaErro(400, res, req, response)
         } else {
@@ -114,15 +114,15 @@ export default class AnalyticsCompanyController {
 
   delete() {
     return async (req, res) => {
-      const { id: id_analytics } = req.query
+      const { id: id_subject } = req.query
 
-      if (!id_analytics) {
+      if (!id_subject) {
         const response = { erro: 'Parâmetros ausentes.' }
         return RespostaErro(400, res, req, response)
       }
 
       try {
-        const response = await analyticsCompanyRepository.delete(id_analytics)
+        const response = await subjectCompanyRepository.delete(id_subject)
         if (response.erro) {
           return RespostaErro(400, res, req, response)
         } else {

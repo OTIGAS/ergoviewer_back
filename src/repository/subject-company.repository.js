@@ -1,31 +1,33 @@
 import { db } from '../config/database.js'
 
-export default class AnalyticsCompanyRepository {
+import { UtilCheckHash, UtilGenerateHash } from '../utils/cryptography.js'
+
+export default class SubjectCompanyRepository {
   async create({ company, user }) {
     try {
       const conn = await db()
       await conn.beginTransactionAsync()
 
-      const analyticsCompanyInsertResult = await conn.queryAsync(
+      const subjectCompanyInsertResult = await conn.queryAsync(
         `
-          INSERT INTO analytics_company (name_analytics, cnpj_analytics, more_information)
+          INSERT INTO subject_company (name_subject, cnpj_subject, more_information)
           VALUES (?, ?, ?)
         `,
-        [company?.name_analytics, company?.cnpj_analytics, company?.more_information]
+        [company?.name_subject, company?.cnpj_subject, company?.more_information]
       )
 
-      if (analyticsCompanyInsertResult.affectedRows === 0) {
+      if (subjectCompanyInsertResult.affectedRows === 0) {
         await conn.rollbackAsync()
         return { erro: `failureCompanyInsertion` }
       }
 
       const userInsertResult = await conn.queryAsync(
         `
-          INSERT INTO user (id_analytics, email_login, password_login, user_role, birth_date, registration_number)
+          INSERT INTO user (id_subject, email_login, password_login, user_role, birth_date, registration_number)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `,
         [
-          analyticsCompanyInsertResult.insertId,
+          subjectCompanyInsertResult.insertId,
           user?.email_login,
           user?.password_login,
           user?.user_role,
@@ -55,24 +57,24 @@ export default class AnalyticsCompanyRepository {
     }
   }
 
-  async find(id_analytics) {
+  async find(id_subject) {
     try {
       const conn = await db()
       return await conn.queryAsync(
         `
           SELECT 
-            ac.id_analytics, ac.name_analytics, ac.cnpj_analytics, ac.more_information,
+            ac.id_subject, ac.name_subject, ac.cnpj_subject, ac.more_information,
             c.id_contact, c.person_name, c.email, c.phone,
             a.id_address, a.number, a.street, a.district, a.city, a.state, a.postal_code, a.complement
           FROM
-            analytics_company ac
+            subject_company ac
           LEFT JOIN
-            contact c ON c.id_analytics = ac.id_analytics
-            address a ON a.id_analytics = ac.id_analytics
+            contact c ON c.id_subject = ac.id_subject
+            address a ON a.id_subject = ac.id_subject
           WHERE
-            ac.id_analytics = ? AND ac.deleted_at IS NULL
+            ac.id_subject = ? AND ac.deleted_at IS NULL
         `,
-        [id_analytics]
+        [id_subject]
       )
     } catch (error) {
       throw error
@@ -81,24 +83,24 @@ export default class AnalyticsCompanyRepository {
     }
   }
 
-  async list({ name_analytics, cnpj_analytics, city }) {
+  async list({ name_subject, cnpj_subject, city }) {
     try {
       const conn = await db()
       return await conn.queryAsync(
         `
           SELECT 
-            ac.id_analytics, ac.name_analytics, ac.cnpj_analytics, ac.more_information,
+            ac.id_subject, ac.name_subject, ac.cnpj_subject, ac.more_information,
             c.id_contact, c.person_name, c.email, c.phone,
             a.id_address, a.number, a.street, a.district, a.city, a.state, a.postal_code, a.complement
           FROM
-            analytics_company ac
+            subject_company ac
           LEFT JOIN
-            contact c ON c.id_analytics = ac.id_analytics
-            address a ON a.id_analytics = ac.id_analytics
+            contact c ON c.id_subject = ac.id_subject
+            address a ON a.id_subject = ac.id_subject
           WHERE
-            ac.name_analytics LIKE ? AND ac.cnpj_analytics LIKE ? AND a.city LIKE ? AND ac.deleted_at IS NULL
+            ac.name_subject LIKE ? AND ac.cnpj_subject LIKE ? AND a.city LIKE ? AND ac.deleted_at IS NULL
         `,
-        [name_analytics || '', cnpj_analytics || '', city || '']
+        [name_subject || '', cnpj_subject || '', city || '']
       )
     } catch (error) {
       throw error
@@ -107,24 +109,24 @@ export default class AnalyticsCompanyRepository {
     }
   }
 
-  async update(id_analytics, { name_analytics, cnpj_analytics, more_information }) {
+  async update(id_subject, { name_subject, cnpj_subject, more_information }) {
     try {
       const conn = await db()
-      const analyticsCompanyUpdateResult = await conn.queryAsync(
+      const subjectCompanyUpdateResult = await conn.queryAsync(
         `
           UPDATE 
-            analytics_company
+            subject_company
           SET
-            name_analytics = ?,
-            cnpj_analytics = ?,
+            name_subject = ?,
+            cnpj_subject = ?,
             more_information = ?
           WHERE
-            id_analytics = ?
+            id_subject = ?
         `,
-        [name_analytics, cnpj_analytics, more_information, id_analytics]
+        [name_subject, cnpj_subject, more_information, id_subject]
       )
 
-      if (analyticsCompanyUpdateResult.affectedRows === 0) {
+      if (subjectCompanyUpdateResult.affectedRows === 0) {
         return { erro: `failureCompanyUpdate` }
       }
 
@@ -136,22 +138,22 @@ export default class AnalyticsCompanyRepository {
     }
   }
 
-  async delete(id_analytics) {
+  async delete(id_subject) {
     try {
       const conn = await db()
-      const analyticsCompanyUpdateResult = await conn.queryAsync(
+      const subjectCompanyUpdateResult = await conn.queryAsync(
         `
           UPDATE 
-            analytics_company
+            subject_company
           SET
             deleted_at = now()
           WHERE
-            id_analytics = ?
+            id_subject = ?
         `,
-        [id_analytics]
+        [id_subject]
       )
 
-      if (analyticsCompanyUpdateResult.affectedRows === 0) {
+      if (subjectCompanyUpdateResult.affectedRows === 0) {
         return { erro: `failureCompanyDeletion` }
       }
 

@@ -8,6 +8,7 @@ const languages = {
     failureCompanyUpdate: 'Failed to update company.',
     successCompanyUpdate: 'Company data updated successfully.',
     failureCompanyDeletion: 'Failed to delete company.',
+    successCompanyDeletion: 'Company data deleted successfully.',
   },
   portuguese: {
     welcomeMessage: 'Bem-vindo ao ErgoViewer!',
@@ -18,5 +19,6 @@ const languages = {
     failureCompanyUpdate: 'Falha na atualização da Empresa.',
     successCompanyUpdate: 'Dados da Empresa atualizados com sucesso.',
     failureCompanyDeletion: 'Falha na exclusão da Empresa.',
+    successCompanyDeletion: 'Dados da empresa excluídos com sucesso.',
   },
 }

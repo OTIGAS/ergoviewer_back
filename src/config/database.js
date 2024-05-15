@@ -1,4 +1,4 @@
-import { createConnection } from 'mysql2/promise';
+import { createConnection } from 'mysql2/promise'
 
 import dotenv from 'dotenv'
 import { dirname } from 'path'
@@ -20,11 +20,11 @@ const config = {
 export const db = () => {
   return new Promise((resolve, reject) => {
     try {
-      const connection = createConnection(config);
-      resolve(connection);
+      const connection = createConnection(config)
+      resolve(connection)
     } catch (error) {
-      console.log("Erro ao criar conexão:", error);
-      reject(error);
+      console.log('Database connection error: ', error)
+      reject(error)
     }
-  });
-};
+  })
+}
