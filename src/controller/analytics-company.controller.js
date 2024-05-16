@@ -13,32 +13,46 @@ dotenv.config({ path: __dirname + '/./../../../.env' })
 export default class AnalyticsCompanyController {
   create() {
     return async (req, res) => {
-      const { company, user } = req.body
+      const { company, user, contact, address } = req.body
 
       if (!company?.name_analytics || !company?.cnpj_analytics || !company?.more_information) {
         const response = { erro: 'missingParameters' }
         return RespostaErro(400, res, req, response)
       }
 
+      if (!user?.email_login || !user?.password_login || !user?.birth_date || !user?.registration_number) {
+        const response = { erro: 'missingParameters' }
+        return RespostaErro(400, res, req, response)
+      }
+
+      if (!contact?.person_name || !contact?.email || !contact?.phone) {
+        console.log('contact', contact)
+        const response = { erro: 'missingParameters' }
+        return RespostaErro(400, res, req, response)
+      }
+
       if (
-        user?.email_login ||
-        user?.password_login ||
-        user?.user_role ||
-        user?.birth_date ||
-        user?.registration_number
+        !address?.number ||
+        !address?.street ||
+        !address?.district ||
+        !address?.city ||
+        !address?.state ||
+        !address?.postal_code
       ) {
+        console.log('address', address)
         const response = { erro: 'missingParameters' }
         return RespostaErro(400, res, req, response)
       }
 
       try {
-        const response = await analyticsCompanyRepository.create({ company, user })
+        const response = await analyticsCompanyRepository.create({ company, user, contact, address })
         if (response.erro) {
           return RespostaErro(400, res, req, response)
         } else {
           return RespostaSucesso(200, res, req, response)
         }
       } catch (error) {
+        console.log('error', error)
         return RespostaFalha(500, res, req, null, error)
       }
     }
@@ -71,7 +85,11 @@ export default class AnalyticsCompanyController {
       const { name_analytics, cnpj_analytics, more_information } = req.query
 
       try {
-        const response = await analyticsCompanyRepository.list({ name_analytics, cnpj_analytics, more_information })
+        const response = await analyticsCompanyRepository.list({
+          name_analytics: name_analytics || '',
+          cnpj_analytics: cnpj_analytics || '',
+          more_information: more_information || '',
+        })
         if (response.erro) {
           return RespostaErro(400, res, req, response)
         } else {
@@ -92,15 +110,15 @@ export default class AnalyticsCompanyController {
         return RespostaErro(400, res, req, response)
       }
 
-      const { body } = req.body
+      const company = req.body
 
-      if (!body?.name_analytics || !body?.cnpj_analytics || !body?.more_information) {
+      if (!company?.name_analytics || !company?.cnpj_analytics || !company?.more_information) {
         const response = { erro: 'missingParameters' }
         return RespostaErro(400, res, req, response)
       }
 
       try {
-        const response = await analyticsCompanyRepository.update(id_analytics, body)
+        const response = await analyticsCompanyRepository.update(id_analytics, company)
         if (response.erro) {
           return RespostaErro(400, res, req, response)
         } else {

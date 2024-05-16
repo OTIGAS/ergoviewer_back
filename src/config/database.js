@@ -1,4 +1,4 @@
-import { createConnection } from 'mysql2/promise'
+import mysql from 'mysql2/promise'
 
 import dotenv from 'dotenv'
 import { dirname } from 'path'
@@ -17,14 +17,12 @@ const config = {
   charset: 'utf8mb4',
 }
 
-export const db = () => {
-  return new Promise((resolve, reject) => {
-    try {
-      const connection = createConnection(config)
-      resolve(connection)
-    } catch (error) {
-      console.log('Database connection error: ', error)
-      reject(error)
-    }
-  })
+export const db = async () => {
+  try {
+    const connection = await mysql.createConnection(config)
+    return connection
+  } catch (error) {
+    console.log('Database connection error: ', error)
+    throw error
+  }
 }

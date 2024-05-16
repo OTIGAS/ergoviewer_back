@@ -2,8 +2,11 @@ const languages = {
   english: {
     welcomeMessage: 'Welcome to ErgoViewer!',
     errorDuplicateRegistration: 'Duplicate CNPJ and/or Email.',
+    errorInformationTooManyCharacters: 'Information with too many characters.',
     failureCompanyInsertion: 'Failed to insert company.',
     failureUserInsertion: 'Failed to insert user.',
+    failureContactInsertion: 'Failed to insert contact.',
+    failureAddressInsertion: 'Failed to insert address.',
     missingParameters: 'Missing parameters.',
     failureCompanyUpdate: 'Failed to update company.',
     successCompanyUpdate: 'Company data updated successfully.',
@@ -13,8 +16,11 @@ const languages = {
   portuguese: {
     welcomeMessage: 'Bem-vindo ao ErgoViewer!',
     errorDuplicateRegistration: 'CNPJ e/ou E-mail duplicados.',
+    errorInformationTooManyCharacters: 'Informações com muitas caracteres.',
     failureCompanyInsertion: 'Falha na inclusão da Empresa.',
     failureUserInsertion: 'Falha na inclusão do Usuário.',
+    failureContactInsertion: 'Falha na inclusão do Contato.',
+    failureAddressInsertion: 'Falha na inclusão do Endereço.',
     missingParameters: 'Parâmetros ausentes.',
     failureCompanyUpdate: 'Falha na atualização da Empresa.',
     successCompanyUpdate: 'Dados da Empresa atualizados com sucesso.',

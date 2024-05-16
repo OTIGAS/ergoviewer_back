@@ -1,0 +1,34 @@
+16/05/2024 01:47:07 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 01:48:40 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 01:49:19 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 01:52:04 - POST /analytics-company/create -> TypeError: conn.queryAsync is not a function
+16/05/2024 01:52:45 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 01:53:21 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 01:57:32 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 02:04:22 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 02:04:57 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 02:05:22 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 02:06:32 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 02:08:08 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 02:08:49 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 02:08:59 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 02:09:49 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 02:11:35 - POST /analytics-company/create -> ReferenceError: conn is not defined
+16/05/2024 02:16:25 - POST /analytics-company/create -> TypeError: conn.commitAsync is not a function
+16/05/2024 02:31:46 - POST /analytics-company/create -> ReferenceError: UtilGenerateToken is not defined
+16/05/2024 02:32:27 - POST /analytics-company/create -> Error: ReferenceError: sign is not defined
+16/05/2024 02:40:36 - POST /analytics-company/create -> TypeError: Cannot read properties of undefined (reading 'affectedRows')
+16/05/2024 02:51:59 - GET /analytics-company/find -> Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'address a ON a.id_analytics = ac.id_analytics
+          WHERE
+            ac.id_' at line 9
+16/05/2024 02:52:47 - GET /analytics-company/find -> Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'address a ON a.id_analytics = ac.id_analytics
+          WHERE
+            ac.id_' at line 9
+16/05/2024 03:19:23 - POST /analytics-company/create -> Error: Unknown column 'district' in 'field list'
+16/05/2024 03:20:15 - POST /analytics-company/create -> Error: Unknown column 'complement' in 'field list'
+16/05/2024 10:52:43 - GET /analytics-company/find -> Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'address a ON a.id_analytics = ac.id_analytics
+          WHERE
+            ac.id_' at line 9
+16/05/2024 10:56:48 - GET /analytics-company/find -> Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'address a ON a.id_analytics = ac.id_analytics
+          WHERE
+            ac.id_' at line 9
