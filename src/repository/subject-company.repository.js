@@ -10,10 +10,16 @@ export default class SubjectCompanyRepository {
 
       const [subjectCompanyInsertResult] = await conn.query(
         `
-          INSERT INTO subject_company (name_subject, cnpj_subject, more_information)
-          VALUES (?, ?, ?)
+          INSERT INTO subject_company (name_subject, cnpj_subject, more_information, id_mediator_analytics, in_mediator_subject)
+          VALUES (?, ?, ?, ?, ?)
         `,
-        [company?.name_subject, company?.cnpj_subject, company?.more_information]
+        [
+          company?.name_subject,
+          company?.cnpj_subject,
+          company?.more_information,
+          company?.id_mediator_analytics,
+          company?.in_mediator_subject,
+        ]
       )
 
       if (subjectCompanyInsertResult.affectedRows === 0) {
@@ -212,7 +218,7 @@ export default class SubjectCompanyRepository {
     }
   }
 
-  async update(id_subject, { name_subject, cnpj_subject, more_information }) {
+  async update(id_subject, company) {
     let conn
     try {
       conn = await db()
@@ -223,11 +229,19 @@ export default class SubjectCompanyRepository {
           SET
             name_subject = ?,
             cnpj_subject = ?,
-            more_information = ?
+            more_information = ?,
+            id_mediator_analytics = ?,
+            in_mediator_subject = ?
           WHERE
             id_subject = ?
         `,
-        [name_subject, cnpj_subject, more_information, id_subject]
+        [
+          company?.name_subject,
+          company?.cnpj_subject,
+          company?.more_information,
+          company?.id_mediator_analytics,
+          company?.in_mediator_subject,
+        ]
       )
 
       if (subjectCompanyUpdateResult.affectedRows === 0) {

@@ -26,7 +26,6 @@ export default class SubjectCompanyController {
       }
 
       if (!contact?.person_name || !contact?.email || !contact?.phone) {
-        console.log('contact', contact)
         const response = { erro: 'missingParameters' }
         return RespostaErro(400, res, req, response)
       }
@@ -40,7 +39,6 @@ export default class SubjectCompanyController {
         !address?.postal_code
       ) {
         console.log('address', address)
-        const response = { erro: 'missingParameters' }
         return RespostaErro(400, res, req, response)
       }
 
