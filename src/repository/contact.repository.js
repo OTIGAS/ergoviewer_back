@@ -1,30 +1,28 @@
 import { db } from '../config/database.js'
-import { UtilGenerateHash, UtilGenerateToken } from '../utils/cryptography.js'
 
 export default class ContactRepository {
-  async create({ id_analytics, contact }) {
+  async create(id_company, contact) {
     let conn
     try {
       conn = await db()
 
       const [contactInsertResult] = await conn.query(
         `
-          INSERT INTO contact (id_analytics, person_name, email, phone)
+          INSERT INTO contact (id_company, person_name, email, phone)
           VALUES (?, ?, ?, ?)
         `,
-        [id_analytics, contact?.person_name, contact?.email, contact?.phone]
+        [id_company, contact?.person_name, contact?.email, contact?.phone]
       )
 
       if (contactInsertResult.affectedRows === 0) {
-        return { erro: `failureContactInsertion` }
+        return { error: `failureContactInsertion` }
       }
 
-      return { mensagem: `welcomeMessage`, token }
+      return { message: `successContactInsertion` }
     } catch (error) {
       console.error(error)
-
       if (error?.message?.includes(`Data too long`)) {
-        return { erro: `errorInformationTooManyCharacters` }
+        return { error: `errorInformationTooManyCharacters` }
       } else {
         throw error
       }
@@ -33,138 +31,115 @@ export default class ContactRepository {
     }
   }
 
-  async find({ id_analytics, id_contact }) {
+  async find(id_contact) {
     let conn
     try {
       conn = await db()
       const [contactSelectResult] = await conn.query(
         `
           SELECT 
-            c.id_contact, c.person_name, c.email, c.phone
+            c.id_contact, c.person_name, c.email, c.phone, c.id_company
           FROM
             contact c
           WHERE
-            c.id_analytics = ? AND c.id_contact = ?
+            c.id_contact = ? AND c.deleted_at IS NULL
         `,
-        [id_analytics, id_contact]
+        [id_contact]
       )
 
-      return contactSelectResult.map((result) => {
-        return {
-          id_contact: result.id_contact,
-          person_name: result.person_name,
-          email: result.email,
-          phone: result.phone,
-        }
-      })
+      return contactSelectResult
     } catch (error) {
+      console.error(error)
       throw error
     } finally {
       if (conn) conn.end()
     }
   }
 
-  async list({ name_analytics, cnpj_analytics, city }) {
+  async list(id_company) {
     let conn
     try {
       conn = await db()
+
       const [contactSelectResult] = await conn.query(
         `
           SELECT 
-            c.id_contact, c.person_name, c.email, c.phone,
+            c.id_contact, c.person_name, c.email, c.phone, c.id_company
           FROM
             contact c
           WHERE
-            c.id_analytics = ? AND c.id_contact = ?
+            c.id_company = ? AND c.deleted_at IS NULL
         `,
-        [`%${name_analytics}%`, `${cnpj_analytics}`, `${city}`]
+        [id_company]
       )
 
-      return contactSelectResult.map((result) => {
-        return {
-          analytics_company: {
-            id_analytics: result.id_analytics,
-            name_analytics: result.name_analytics,
-            cnpj_analytics: result.cnpj_analytics,
-            more_information: result.more_information,
-          },
-          contact: {
-            id_contact: result.id_contact,
-            person_name: result.person_name,
-            email: result.email,
-            phone: result.phone,
-          },
-          address: {
-            id_address: result.id_address,
-            number: result.number,
-            street: result.street,
-            district: result.district,
-            city: result.city,
-            state: result.state,
-            postal_code: result.postal_code,
-            complement: result.complement,
-          },
-        }
-      })
+      return contactSelectResult
     } catch (error) {
+      console.error(error)
       throw error
     } finally {
       if (conn) conn.end()
     }
   }
 
-  async update(id_analytics, { name_analytics, cnpj_analytics, more_information }) {
+  async update(id_contact, { person_name, email, phone }) {
     let conn
     try {
       conn = await db()
       const contactUpdateResult = await conn.query(
         `
           UPDATE 
-            analytics_company
+            contact
           SET
-            name_analytics = ?,
-            cnpj_analytics = ?,
-            more_information = ?
+            person_name = ?,
+            email = ?,
+            phone = ?
           WHERE
-            id_analytics = ?
+            id_contact = ?
         `,
-        [name_analytics, cnpj_analytics, more_information, id_analytics]
+        [person_name, email, phone, id_contact]
       )
 
       if (contactUpdateResult.affectedRows === 0) {
-        return { erro: `failureCompanyUpdate` }
+        return { error: `failureContactUpdate` }
       }
 
-      return { mensagem: `successCompanyUpdate` }
+      return { message: `successContactUpdate` }
     } catch (error) {
-      throw error
+      console.error(error)
+      if (error?.message?.includes(`Data too long`)) {
+        return { error: `errorInformationTooManyCharacters` }
+      } else {
+        throw error
+      }
     } finally {
       if (conn) conn.end()
     }
   }
 
-  async delete(id_analytics) {
+  async delete(id_contact) {
     let conn
     try {
       conn = await db()
       const contactUpdateResult = await conn.query(
         `
           UPDATE 
-            analytics_company
+            contact
           SET
             deleted_at = now()
           WHERE
-            id_analytics = ?
+            id_contact = ?
         `,
-        [id_analytics]
+        [id_contact]
       )
 
       if (contactUpdateResult.affectedRows === 0) {
-        return { erro: `failureCompanyDeletion` }
+        return { error: `failureContactDeletion` }
       }
 
-      return { mensagem: `successCompanyDeletion` }
+      return { message: `successContactDeletion` }
     } catch (error) {
+      console.error(error)
       throw error
     } finally {
       if (conn) conn.end()

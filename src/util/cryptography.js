@@ -52,9 +52,9 @@ export const UtilCheckHash = async (value, hash) => {
   })
 }
 
-export const UtilGenerateToken = async (data, first) => {
+export const UtilGenerateToken = (data, first) => {
   try {
-    const token = await sign(
+    const token = sign(
       { id: data.id, user_role: data.role },
       process.env.JWT_SECRET,
       !first ? { expiresIn: '1d' } : { expiresIn: '60s' }
@@ -65,11 +65,11 @@ export const UtilGenerateToken = async (data, first) => {
   }
 }
 
-export const UtilDecodeToken = async (request) => {
+export const UtilDecodeToken = (request) => {
   try {
     const token = request.headers.authorization?.split(' ')[1]
     if (!token) throw new Error('No token provided')
-    const decoded = await verify(token, process.env.JWT_SECRET)
+    const decoded = verify(token, process.env.JWT_SECRET)
     return decoded
   } catch (error) {
     throw new Error(error)
