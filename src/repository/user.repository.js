@@ -1,6 +1,12 @@
 import { db } from '../config/database.js'
 import { UtilCheckHash, UtilGenerateHash, UtilGenerateToken } from '../util/cryptography.js'
 
+import fs from 'fs'
+import path, { dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
 export default class UserRepository {
   async create(user) {
     let conn
@@ -9,7 +15,7 @@ export default class UserRepository {
 
       const [userInsertResult] = await conn.query(
         `
-          INSERT INTO user (id_company, user_role, user_name, birth_date, registration_number)
+          INSERT INTO user (id_company, email_login, user_role, user_name, birth_date, registration_number)
           VALUES (?, ?, ?, ?, ?, ?)
         `,
         [
@@ -22,7 +28,9 @@ export default class UserRepository {
         ]
       )
 
-      if (userInsertResult[0].affectedRows === 0) {
+      console.log(userInsertResult)
+
+      if (userInsertResult.affectedRows === 0) {
         return { error: `failureUserInsertion` }
       }
 
@@ -174,7 +182,7 @@ export default class UserRepository {
     }
   }
 
-  async list({ id_company, user_role }) {
+  async list({ id_company, user_role, user_name }) {
     let conn
     try {
       conn = await db()
@@ -191,9 +199,13 @@ export default class UserRepository {
           FROM
             user u
           WHERE
-            (u.id_company LIKE ? OR u.user_role LIKE ?) AND u.deleted_at IS NULL
+            ( 
+              u.user_role = ? OR 
+              u.user_name LIKE ?
+            ) AND u.id_company = ? 
+            AND u.deleted_at IS NULL
         `,
-        [id_company, user_role]
+        [user_role, `%${user_name}%`, id_company]
       )
 
       return userSelectResult
@@ -208,8 +220,30 @@ export default class UserRepository {
   async avatarUser(id_user, fileName) {
     let conn
     try {
-      console.log(id_user, fileName)
       conn = await db()
+      const [userSelectResult] = await conn.query(
+        `
+          SELECT
+            avatar
+          FROM
+            user
+          WHERE
+            id_user = ?
+        `,
+        [id_user]
+      )
+
+      if (userSelectResult[0].avatar) {
+        const oldAvatar = userSelectResult[0].avatar
+
+        if (oldAvatar) {
+          const oldAvatarPath = path.join(__dirname, '../../avatars', oldAvatar)
+          fs.unlink(oldAvatarPath, (err) => {
+            if (err) console.error(`Error deleting old avatar: ${err.message}`)
+          })
+        }
+      }
+
       const userUpdateResult = await conn.query(
         `
           UPDATE 

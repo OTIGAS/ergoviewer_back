@@ -56,14 +56,14 @@ export default class ProjectRepository {
         `
         SELECT
           p.id_company_user,
-          companyu.name_company AS user_company_name,
+          companyu.name_company AS user_name_company,
           p.id_user_contact, 
           contactu.person_name AS user_contact_person_name,
           p.id_user_address,
           addressu.city AS user_address_city,
 
           p.id_company_customer,
-          companyc.name_company AS customer_company_name,
+          companyc.name_company AS customer_name_company,
           p.id_customer_contact, 
           contactc.person_name AS customer_contact_person_name,
           p.id_customer_address,
@@ -114,17 +114,18 @@ export default class ProjectRepository {
             p.id_company_user,
             companyu.name_company AS user_company_name,
             p.id_user_contact, 
-            contactu.person_name AS user_contact_person_name,
+            contactu.person_name AS user_contact_name,
             p.id_user_address,
             addressu.city AS user_address_city,
 
             p.id_company_customer,
             companyc.name_company AS customer_company_name,
             p.id_customer_contact, 
-            contactc.person_name AS customer_contact_person_name,
+            contactc.person_name AS customer_contact_name,
             p.id_customer_address,
             addressc.city AS customer_address_city,
             
+            p.id_project,
             p.name_project,
             p.description,
             p.created_at,
@@ -158,7 +159,7 @@ export default class ProjectRepository {
     }
   }
 
-  async update(id_project, project) {
+  async update(project) {
     let conn
     try {
       conn = await db()
@@ -167,27 +168,21 @@ export default class ProjectRepository {
           UPDATE 
             project
           SET
-            id_company_customer = ?,
             id_customer_contact = ?,
             id_customer_address = ?,
-            id_company_user = ?,
-            id_user_contact = ?,
-            id_user_address = ?,
             name_project = ?,
             description = ?
           WHERE
             id_project = ?
         `,
         [
-          project?.id_company_customer,
           project?.id_customer_contact,
           project?.id_customer_address,
-          project?.id_company_user,
           project?.id_user_contact,
           project?.id_user_address,
           project?.name_project,
           project?.description,
-          id_project,
+          project?.id_project,
         ]
       )
 

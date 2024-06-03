@@ -25,8 +25,8 @@ const storage = diskStorage({
   },
   filename: function (req, file, callback) {
     try {
-      const nameAndExtension = file.originalname.split(' - ')[0]
-      const [name, extension] = nameAndExtension.split('.')
+      const fileOriginalName = file.originalname.replace(/-/g, '').replace(/\s+/g, '')
+      const [name, extension] = fileOriginalName.split('.')
       const uniqueSuffix = crypto.randomBytes(8).toString('hex')
       callback(null, `${name}-${uniqueSuffix}.${extension}`)
     } catch (error) {

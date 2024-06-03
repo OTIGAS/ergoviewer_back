@@ -110,13 +110,12 @@ export default class UserController {
   list() {
     return async (req, res) => {
       try {
-        const { id_company, user_role } = req.query
-
-        console.log(req.query)
+        const { id_company, user_role, user_name } = req.query
 
         const response = await userRepository.list({
           id_company: id_company || '',
           user_role: user_role || '',
+          user_name: user_name || '',
         })
         if (response.error) {
           return ResponseError(400, res, req, response)

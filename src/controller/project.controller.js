@@ -15,6 +15,7 @@ export default class ProjectController {
     return async (req, res) => {
       try {
         const { project } = req.body
+        console.log(project)
 
         if (
           !project?.id_company_user ||
@@ -100,6 +101,7 @@ export default class ProjectController {
         const { project } = req.body
 
         if (
+          !project?.id_project ||
           !project?.id_company_customer ||
           !project?.id_customer_contact ||
           !project?.id_customer_address ||

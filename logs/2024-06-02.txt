@@ -1,0 +1,4 @@
+02/06/2024 13:53:06 - PATCH /user/avatar -> ReferenceError: __dirname is not defined
+02/06/2024 19:33:54 - POST /user/create -> Error: Column count doesn't match value count at row 1
+02/06/2024 19:35:06 - POST /user/create -> TypeError: Cannot read properties of undefined (reading 'affectedRows')
+02/06/2024 19:37:36 - POST /user/create -> TypeError: Cannot read properties of undefined (reading 'affectedRows')
