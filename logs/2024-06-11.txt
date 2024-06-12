@@ -1,0 +1,1 @@
+11/06/2024 17:46:09 - POST /project/create -> Error: Cannot add or update a child row: a foreign key constraint fails (`ergoviewer`.`project`, CONSTRAINT `project_ibfk_4` FOREIGN KEY (`id_company_user`) REFERENCES `company` (`id_company`))

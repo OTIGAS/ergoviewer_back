@@ -1,0 +1,4 @@
+09/06/2024, 10:15:48 - DELETE /address/delete -> Error: Truncated incorrect DOUBLE value: 'undefined'
+09/06/2024, 10:16:02 - DELETE /address/delete -> Error: Truncated incorrect DOUBLE value: 'undefined'
+09/06/2024, 14:14:53 - DELETE /project/delete -> Error: Truncated incorrect DOUBLE value: 'undefined'
+09/06/2024, 17:29:05 - GET /project/find -> ReferenceError: id_department is not defined

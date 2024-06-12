@@ -222,27 +222,27 @@ export default class CompanyRepository {
           addressSelectResult.find((result) => result.id_company === company.id_company)?.addresses || []
 
         return {
-          company: {
+          companyResult: {
             id_company: company.id_company,
             type_company: company.type_company,
             name_company: company.name_company,
             cnpj_company: company.cnpj_company,
             more_information: company.more_information,
           },
-          mediator: companyMediators.map((mediator) => ({
+          mediatorResult: companyMediators.map((mediator) => ({
             id_company: mediator.id_company,
             type_company: mediator.type_company,
             name_company: mediator.name_company,
             cnpj_company: mediator.cnpj_company,
             more_information: mediator.more_information,
           })),
-          contact: companyContacts.map((contact) => ({
+          contactResult: companyContacts.map((contact) => ({
             id_contact: contact.id_contact,
             person_name: contact.person_name,
             email: contact.email,
             phone: contact.phone,
           })),
-          address: companyAddresses.map((address) => ({
+          addressResult: companyAddresses.map((address) => ({
             id_address: address.id_address,
             number: address.number,
             street: address.street,
@@ -262,7 +262,7 @@ export default class CompanyRepository {
     }
   }
 
-  async list({ name_company, cnpj_company, city }) {
+  async list({ cnpj_company }) {
     let conn
     try {
       conn = await db()
@@ -282,32 +282,34 @@ export default class CompanyRepository {
           LEFT JOIN
             address a ON a.id_company = c.id_company AND a.deleted_at IS NULL
           WHERE
-            (c.name_company LIKE ? OR c.cnpj_company LIKE ? OR a.city LIKE ?) 
+            c.cnpj_company LIKE ?
             AND c.deleted_at IS NULL
         `,
-        [`%${name_company}%`, `%${cnpj_company}%`, `%${city}%`]
+        [`%${cnpj_company}%`]
       )
 
       if (!companySelectResult || companySelectResult.length === 0) {
         return []
       }
 
+      console.log(companySelectResult)
+
       const mediatorSelectResultPromises = companySelectResult.map(async (company) => {
         const [mediators] = await conn.query(
           `
-                SELECT 
-                    c.id_company, 
-                    c.type_company,
-                    c.name_company, 
-                    c.cnpj_company, 
-                    c.more_information, 
-                    c.created_at, 
-                    c.updated_at
-                FROM
-                    company c
-                WHERE
-                    c.id_mediator = ? AND c.deleted_at IS NULL
-                `,
+            SELECT 
+                c.id_company, 
+                c.type_company,
+                c.name_company, 
+                c.cnpj_company, 
+                c.more_information, 
+                c.created_at, 
+                c.updated_at
+            FROM
+                company c
+            WHERE
+                c.id_mediator = ? AND c.deleted_at IS NULL
+          `,
           [company.id_company]
         )
         return { id_company: company.id_company, mediators }
@@ -316,16 +318,16 @@ export default class CompanyRepository {
       const contactSelectResultPromises = companySelectResult.map(async (company) => {
         const [contacts] = await conn.query(
           `
-                SELECT
-                    c.id_contact, 
-                    c.person_name, 
-                    c.email, 
-                    c.phone
-                FROM
-                    contact c
-                WHERE
-                    c.id_company = ? AND deleted_at IS NULL
-                `,
+            SELECT
+                c.id_contact, 
+                c.person_name, 
+                c.email, 
+                c.phone
+            FROM
+                contact c
+            WHERE
+                c.id_company = ? AND deleted_at IS NULL
+          `,
           [company.id_company]
         )
         return { id_company: company.id_company, contacts }
@@ -334,20 +336,20 @@ export default class CompanyRepository {
       const addressSelectResultPromises = companySelectResult.map(async (company) => {
         const [addresses] = await conn.query(
           `
-                SELECT
-                    a.id_address, 
-                    a.number, 
-                    a.street, 
-                    a.district, 
-                    a.city, 
-                    a.state, 
-                    a.postal_code, 
-                    a.complement
-                FROM
-                    address a
-                WHERE
-                    a.id_company = ? AND deleted_at IS NULL
-                `,
+            SELECT
+                a.id_address, 
+                a.number, 
+                a.street, 
+                a.district, 
+                a.city, 
+                a.state, 
+                a.postal_code, 
+                a.complement
+            FROM
+                address a
+            WHERE
+                a.id_company = ? AND deleted_at IS NULL
+          `,
           [company.id_company]
         )
         return { id_company: company.id_company, addresses }

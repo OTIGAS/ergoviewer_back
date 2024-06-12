@@ -122,7 +122,21 @@ export default class ProjectRepository {
         [id_project]
       )
 
-      return projectSelectResult
+      const [departmentSelectResult] = await conn.query(
+        `
+          SELECT 
+            d.id_department, 
+            d.id_project, 
+            d.department_name
+          FROM
+            department d
+          WHERE
+            d.id_project = ? AND d.deleted_at IS NULL
+        `,
+        [id_project]
+      )
+
+      return { projects: projectSelectResult, departments: departmentSelectResult }
     } catch (error) {
       console.error(error)
       throw error

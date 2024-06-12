@@ -14,14 +14,14 @@ export default class AnalysisController {
   create() {
     return async (req, res) => {
       try {
-        const { analysis } = req.body
+        const { analysis, niosh, owas, rula } = req.body
 
         if (!analysis?.analysis_name || !analysis?.analysis_image || !analysis?.analysis_description) {
           const response = { error: 'missingParameters' }
           return ResponseError(400, res, req, response)
         }
 
-        const response = await analysisRepository.create(id_department, analysis)
+        const response = await analysisRepository.create(analysis, niosh, owas, rula)
         if (response.error) {
           return ResponseError(400, res, req, response)
         } else {
